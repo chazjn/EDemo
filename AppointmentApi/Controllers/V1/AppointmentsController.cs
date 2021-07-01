@@ -38,8 +38,14 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create()
+        public IActionResult Create(AppointmentDto appointmentDto)
         {
+            //check datetime value is within range
+            //check user exists
+            //check equipment is available at that time
+            //book out equipment
+            //create appointment
+            //send email
             return Ok("Create");
         }
 
