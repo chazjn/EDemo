@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmailNotificationSystem;
 using EquipmentAvailabilty;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,10 @@ namespace AppointmentApi
             });
 
             services.AddSingleton<IEquipmentAvailabilityService, EquipmentAvailabilityService>();
+
+            var emailConfigurationSection = Configuration.GetSection("EmailNotificationSystem");
+            var smtpClientSettings = emailConfigurationSection.Get<SmtpClientSettings>();
+            services.AddScoped<ISmtpClient>(serviceProvider => new SmtpClientAdapter(smtpClientSettings));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EmailNotificationSystem\EmailNotificationSystem.csproj" />
     <ProjectReference Include="..\EquipmentAvailabilty\EquipmentAvailabilty.csproj" />
   </ItemGroup>
 
