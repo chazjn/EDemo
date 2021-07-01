@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentApi", "Appointme
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentAvailabilty", "EquipmentAvailabilty\EquipmentAvailabilty.csproj", "{0172D998-DFA6-46E5-A866-A6B317440174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayApi.Public", "GatewayApi.Public\GatewayApi.Public.csproj", "{BB692AD8-121F-4449-B5BD-C50F0511F251}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayApi.Internal", "GatewayApi.Internal\GatewayApi.Internal.csproj", "{E7EDDD95-E7E9-4189-AEB7-48B7B131B55F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0172D998-DFA6-46E5-A866-A6B317440174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0172D998-DFA6-46E5-A866-A6B317440174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0172D998-DFA6-46E5-A866-A6B317440174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB692AD8-121F-4449-B5BD-C50F0511F251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB692AD8-121F-4449-B5BD-C50F0511F251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB692AD8-121F-4449-B5BD-C50F0511F251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB692AD8-121F-4449-B5BD-C50F0511F251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7EDDD95-E7E9-4189-AEB7-48B7B131B55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7EDDD95-E7E9-4189-AEB7-48B7B131B55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7EDDD95-E7E9-4189-AEB7-48B7B131B55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7EDDD95-E7E9-4189-AEB7-48B7B131B55F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
