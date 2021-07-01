@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using AppointmentApi.Dto;
 using AppointmentApi.Db.Models;
+using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentApi.Db
 {
@@ -23,6 +26,12 @@ namespace AppointmentApi.Db
             return _appointmentsContext.Appointments.Where(x => x.PatientId == appointment.PatientId
                                                              && x.DateTime == appointment.DateTime
                                                              && x.IsDeleted == false).SingleOrDefault();
+        }
+
+        public IList<Appointment> GetAppointmentsByDate(DateTime date)
+        {
+            return _appointmentsContext.Appointments.Where(x => x.IsDeleted == false
+                                                             && x.DateTime.Date == date.Date).ToList();
         }
 
         public void CreateAppointment(AppointmentDto Dto, int equipmentId)

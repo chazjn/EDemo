@@ -30,9 +30,10 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public ActionResult<IList<AppointmentDto>> Get()
         {
-            return Ok("Get List");
+            var list = _appointmentsRepository.GetAppointmentsByDate(DateTime.Now.Date);
+            return Ok(list);
         }
 
         [HttpPost]

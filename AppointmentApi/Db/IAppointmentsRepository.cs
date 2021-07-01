@@ -1,5 +1,7 @@
 ﻿using AppointmentApi.Dto;
 using AppointmentApi.Db.Models;
+using System;
+using System.Collections.Generic;
 
 namespace AppointmentApi.Db
 {
@@ -8,6 +10,8 @@ namespace AppointmentApi.Db
         Patient GetPatient(int patientId);
 
         Appointment GetAppointment(AppointmentDto appointment);
+
+        public IList<Appointment> GetAppointmentsByDate(DateTime date);
 
         void CreateAppointment(AppointmentDto Dto, int equipmentId);
 
