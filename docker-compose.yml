@@ -24,3 +24,13 @@ services:
     build:
       context: .
       dockerfile: AppointmentApi/Dockerfile
+    depends_on:
+      - appointmentapi-db
+  
+  appointmentapi-db:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "5003:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=2TnXSLhuAvN6xr42 
