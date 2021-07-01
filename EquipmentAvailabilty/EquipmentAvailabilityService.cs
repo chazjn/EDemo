@@ -41,29 +41,29 @@ namespace EquipmentAvailabilty
             return list;
         }
 
-        public void SetAvailability(int equipmentId, DateTime dateTime, bool isAvailable)
+        public void SetAvailability(EquipmentAvailabilityDto equipmentAvailabilityDto)
         {
-            if(_equipmentItems.Any(e => e.Id == equipmentId) == false)
+            if(_equipmentItems.Any(e => e.Id == equipmentAvailabilityDto.EquipmentId) == false)
             {
-                throw new ArgumentOutOfRangeException("equipmentId", $"equipmentId '{equipmentId}' does not exist");
+                throw new ArgumentOutOfRangeException("equipmentId", $"equipmentId '{equipmentAvailabilityDto.EquipmentId}' does not exist");
             }
 
-            var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentId && a.Date == dateTime).SingleOrDefault();
+            var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentAvailabilityDto.EquipmentId && a.Date == equipmentAvailabilityDto.Date).SingleOrDefault();
 
             if(booking == null)
             {
-                if(isAvailable == false)
+                if(equipmentAvailabilityDto.IsAvailable == false)
                 {
                     _equipmentItemBookings.Add(new EquipmentItemBooking
                     {
-                        EquipmentId = equipmentId,
-                        Date = dateTime
+                        EquipmentId = equipmentAvailabilityDto.EquipmentId,
+                        Date = equipmentAvailabilityDto.Date
                     });
                 }
             }
             else
             {
-                if (isAvailable == true)
+                if (equipmentAvailabilityDto.IsAvailable == true)
                 {
                     _equipmentItemBookings.Remove(booking);
                 }
