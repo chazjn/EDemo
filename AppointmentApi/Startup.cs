@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EquipmentAvailabilty;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,8 @@ namespace AppointmentApi
                 o.GroupNameFormat = "'v'VVV";
                 o.SubstituteApiVersionInUrl = true;
             });
+
+            services.AddSingleton<IEquipmentAvailabilityService, EquipmentAvailabilityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

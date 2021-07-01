@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EquipmentAvailabilty;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,10 +14,12 @@ namespace AppointmentApi.Controllers
     public class AppointmentsController : ControllerBase
     {
         private readonly ILogger<AppointmentsController> _logger;
+        private readonly IEquipmentAvailabilityService _equipmentAvailabilityService;
 
-        public AppointmentsController(ILogger<AppointmentsController> logger)
+        public AppointmentsController(ILogger<AppointmentsController> logger, IEquipmentAvailabilityService equipmentAvailabilityService)
         {
             _logger = logger;
+            _equipmentAvailabilityService = equipmentAvailabilityService;
         }
 
         [HttpGet]
@@ -43,7 +46,7 @@ namespace AppointmentApi.Controllers
         [Route("Cancel")]
         public IActionResult Cancel()
         {
-            return Ok("Change");
+            return Ok("Cancel");
         }
     }
 }
