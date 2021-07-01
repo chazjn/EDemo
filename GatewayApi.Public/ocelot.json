@@ -1,7 +1,7 @@
 ﻿{
   "Routes": [
     {
-      "DownstreamPathTemplate": "/appointments/create",
+      "DownstreamPathTemplate": "/v1/appointments/create",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -9,11 +9,11 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/appointments/create",
+      "UpstreamPathTemplate": "/v1/appointments/create",
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
-      "DownstreamPathTemplate": "/appointments/change",
+      "DownstreamPathTemplate": "/v1/appointments/change",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -21,11 +21,11 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/appointments/change",
+      "UpstreamPathTemplate": "/v1/appointments/change",
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
-      "DownstreamPathTemplate": "/appointments/cancel",
+      "DownstreamPathTemplate": "/v1/appointments/cancel",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -33,7 +33,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/appointments/cancel",
+      "UpstreamPathTemplate": "/v1/appointments/cancel",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],

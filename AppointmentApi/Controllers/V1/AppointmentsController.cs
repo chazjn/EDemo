@@ -23,9 +23,9 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult List()
+        public IActionResult Get()
         {
-            return Ok("List");
+            return Ok("Get List");
         }
 
         [HttpPost]

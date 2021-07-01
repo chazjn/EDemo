@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  apigateway:
+  apigateway.public:
     image: ${DOCKER_REGISTRY-}gatewayapi.public
     ports:
       - "5000:80"
@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: GatewayApi.Public/Dockerfile
 
-  apigateway:
+  apigateway.internal:
     image: ${DOCKER_REGISTRY-}gatewayapi.internal
     ports:
       - "5001:80"
