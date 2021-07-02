@@ -2,7 +2,7 @@
 
 namespace EquipmentAvailabilty
 {
-    public class EquipmentAvailabilityDto
+    public class EquipmentAvailability
     {
         public int EquipmentId { get; set; }
         public bool IsAvailable { get; set; }

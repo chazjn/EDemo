@@ -5,7 +5,8 @@ namespace EquipmentAvailabilty
 {
     public interface IEquipmentAvailabilityService
     {
-        IList<EquipmentAvailabilityDto> GetAvailability(DateTime dateTime);
-        void SetAvailability(EquipmentAvailabilityDto equipmentAvailabilityDto);
+        IList<EquipmentAvailability> GetAvailability(DateTime dateTime);
+        EquipmentReservationResult ReserveEquipment(DateTime dateTime);
+        void UnreserveEquipment(DateTime dateTime);
     }
 }

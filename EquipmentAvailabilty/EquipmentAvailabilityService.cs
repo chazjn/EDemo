@@ -22,15 +22,15 @@ namespace EquipmentAvailabilty
             _equipmentItemBookings = new List<EquipmentItemBooking>();
         }
 
-        public IList<EquipmentAvailabilityDto> GetAvailability(DateTime dateTime)
+        public IList<EquipmentAvailability> GetAvailability(DateTime dateTime)
         {
-            var list = new List<EquipmentAvailabilityDto>();
+            var list = new List<EquipmentAvailability>();
 
             foreach (var equipmentItem in _equipmentItems)
             {
                 var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentItem.Id && a.Date == dateTime).SingleOrDefault();
 
-                list.Add(new EquipmentAvailabilityDto
+                list.Add(new EquipmentAvailability
                 {
                     EquipmentId = equipmentItem.Id,
                     Date = dateTime,
@@ -41,32 +41,31 @@ namespace EquipmentAvailabilty
             return list;
         }
 
-        public void SetAvailability(EquipmentAvailabilityDto equipmentAvailabilityDto)
+        public EquipmentReservationResult ReserveEquipment(DateTime dateTime)
         {
-            if(_equipmentItems.Any(e => e.Id == equipmentAvailabilityDto.EquipmentId) == false)
+            var availability = GetAvailability(dateTime);
+            var result = new EquipmentReservationResult();
+
+            if (availability.Count > 0)
             {
-                throw new ArgumentOutOfRangeException("equipmentId", $"equipmentId '{equipmentAvailabilityDto.EquipmentId}' does not exist");
+                availability.First().IsAvailable = false;
+                return new EquipmentReservationResult
+                {
+                    Successful = true,
+                    EquipmentAvailability = availability.First()
+                };
             }
 
-            var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentAvailabilityDto.EquipmentId && a.Date == equipmentAvailabilityDto.Date).SingleOrDefault();
+            return result;
+        }
 
-            if(booking == null)
+        public void UnreserveEquipment(DateTime dateTime)
+        {
+            var availability = GetAvailability(dateTime);
+
+            if (availability.Count > 0)
             {
-                if(equipmentAvailabilityDto.IsAvailable == false)
-                {
-                    _equipmentItemBookings.Add(new EquipmentItemBooking
-                    {
-                        EquipmentId = equipmentAvailabilityDto.EquipmentId,
-                        Date = equipmentAvailabilityDto.Date
-                    });
-                }
-            }
-            else
-            {
-                if (equipmentAvailabilityDto.IsAvailable == true)
-                {
-                    _equipmentItemBookings.Remove(booking);
-                }
+                availability.First().IsAvailable = true;
             }
         }
     }
