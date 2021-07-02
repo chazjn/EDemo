@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace AppointmentApi.Validation
 {
-    public class ChangeAppointmentValidator : AppointmentValidator<AppointmentChangeDto>
+    public class ChangeAppointmentValidator : AppointmentValidator
     {
         public ChangeAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate(AppointmentChangeDto appointment)
+        public override IList<ValidationError> Validate<AppointmentChangeDto>(AppointmentChangeDto appointment)
         {
             //Same as create
             //2 days before

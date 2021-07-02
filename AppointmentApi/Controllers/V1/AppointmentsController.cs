@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AppointmentApi.Db;
+﻿using System.Collections.Generic;
 using AppointmentApi.Dto;
+using AppointmentApi.Validation;
 using EmailNotificationSystem;
-using EquipmentAvailabilty;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace AppointmentApi.Controllers
 {
@@ -16,51 +11,79 @@ namespace AppointmentApi.Controllers
     [Route("v{version:apiVersion}/[controller]")]
     public class AppointmentsController : ControllerBase
     {
-        private readonly ILogger<AppointmentsController> _logger;
-        private readonly IEquipmentAvailabilityService _equipmentAvailabilityService;
-        private readonly IAppointmentsRepository _appointmentsRepository;
+        private readonly IValidatorFactory _validatorFactory;
         private readonly ISmtpClient _smtpClient;
 
-        public AppointmentsController(ILogger<AppointmentsController> logger, IEquipmentAvailabilityService equipmentAvailabilityService, IAppointmentsRepository appointmentsRepository, ISmtpClient smtpClient)
+        public AppointmentsController(IValidatorFactory validatorFactory, ISmtpClient smtpClient)
         {
-            _logger = logger;
-            _equipmentAvailabilityService = equipmentAvailabilityService;
-            _appointmentsRepository = appointmentsRepository;
+            _validatorFactory = validatorFactory;
             _smtpClient = smtpClient;
         }
 
         [HttpGet]
         public ActionResult<IList<AppointmentDto>> Get()
         {
-            var list = _appointmentsRepository.GetAppointmentsByDate(DateTime.Now.Date);
-            return Ok(list);
+            //var list = _appointmentsRepository.GetAppointmentsByDate(DateTime.Now.Date);
+            return Ok("list");
         }
 
         [HttpPost]
         [Route("Create")]
         public IActionResult Create(AppointmentDto appointmentDto)
         {
-            //check datetime value is within range
-            //check user exists
-            //check equipment is available at that time
-            //book out equipment
-            //create appointment
-            //send email
-            return Ok("Create");
+            var validator = _validatorFactory.Build("create");
+            var errors = validator.Validate(appointmentDto);
+
+            if (errors.Count == 0)
+            {
+                //book out equipment
+                //create appointment
+                //send email
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(errors);
+            }
         }
 
         [HttpPost]
         [Route("Change")]
-        public IActionResult Change()
+        public IActionResult Change(AppointmentChangeDto appointmentDto)
         {
-            return Ok("Change");
+            var validator = _validatorFactory.Build("change");
+            var errors = validator.Validate(appointmentDto);
+
+            if (errors.Count == 0)
+            {
+                //update equipment
+                //update appointment
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(errors);
+            }
         }
 
         [HttpPost]
         [Route("Cancel")]
-        public IActionResult Cancel()
+        public IActionResult Cancel(AppointmentChangeDto appointmentDto)
         {
-            return Ok("Cancel");
+            var validator = _validatorFactory.Build("cancel");
+            var errors = validator.Validate(appointmentDto);
+
+            if (errors.Count == 0)
+            {
+                //book out equipment
+                //create appointment
+                //send email
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(errors);
+            }
         }
     }
 }

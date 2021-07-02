@@ -7,29 +7,24 @@ using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
 {
-    public class CreateAppointmentValidator : AppointmentValidator<AppointmentDto>
+    public class CreateAppointmentValidator: AppointmentValidator
     {
         public CreateAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate(AppointmentDto appointment)
+        public override IList<ValidationError> Validate<AppointmentDto>(AppointmentDto appointment)
         {
             //TODO: check datetime is on the hour
             //check datetime start time
-            //check datetime end time
-            //check days before
+            //check days befor
             //check user exists
             //check equipment is available
 
-            if(appointment.DateTime.TimeOfDay < _appointmentParameters.FirstAppointmentTimeOfDay)
+            if(appointment.DateTime.TimeOfDay < _appointmentParameters.FirstAppointmentTimeOfDay
+            || appointment.DateTime.TimeOfDay > _appointmentParameters.LastAppointmentTimeOfDay)
             {
-                AddValidationError($"Appointment cannot start before {_appointmentParameters.FirstAppointmentTimeOfDay}");
-            }
-
-            if(appointment.DateTime.TimeOfDay > _appointmentParameters.FirstAppointmentTimeOfDay)
-            {
-                AddValidationError($"Appointment cannot start after {_appointmentParameters.LastAppointmentTimeOfDay}");
+                AddValidationError($"Appointment must be between {_appointmentParameters.FirstAppointmentTimeOfDay} and {_appointmentParameters.LastAppointmentTimeOfDay}");
             }
 
             var cutoffDateTime = (DateTime.Now + _appointmentParameters.CanCreateBefore) - _appointmentParameters.AppointmentLength;

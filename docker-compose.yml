@@ -8,6 +8,8 @@ services:
     build:
       context: .
       dockerfile: GatewayApi.Public/Dockerfile
+    environment:
+      - TZ=Europe/London
 
   apigateway.internal:
     image: ${DOCKER_REGISTRY-}gatewayapi.internal
@@ -16,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: GatewayApi.Internal/Dockerfile
+    environment:
+      - TZ=Europe/London
 
   appointmentapi:
     image: ${DOCKER_REGISTRY-}appointmentapi
@@ -26,6 +30,8 @@ services:
       dockerfile: AppointmentApi/Dockerfile
     depends_on:
       - appointmentapi-db
+    environment:
+      - TZ=Europe/London
   
   appointmentapi-db:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
@@ -34,3 +40,4 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=2TnXSLhuAvN6xr42 
+      - TZ=Europe/London

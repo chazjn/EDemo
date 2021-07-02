@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using AppointmentApi.Db;
+using AppointmentApi.Validation;
 
 namespace AppointmentApi
 {
@@ -51,8 +52,6 @@ namespace AppointmentApi
                 o.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddSingleton<IEquipmentAvailabilityService, EquipmentAvailabilityService>();
-
             var emailConfigurationSection = Configuration.GetSection("EmailNotificationSystem");
             var smtpClientSettings = emailConfigurationSection.Get<SmtpClientSettings>();
             services.AddScoped<ISmtpClient>(serviceProvider => new SmtpClientAdapter(smtpClientSettings));
@@ -60,7 +59,10 @@ namespace AppointmentApi
             services.AddDbContext<AppointmentsContext>(options => options
                                 .UseSqlServer(Configuration.GetConnectionString("AppointmentsContext")));
 
+            services.AddSingleton<IEquipmentAvailabilityService, EquipmentAvailabilityService>();
             services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+            services.AddScoped<IAppointmentParameters, StandardAppointmentParameters>();
+            services.AddScoped<IValidatorFactory, ValidatorFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
