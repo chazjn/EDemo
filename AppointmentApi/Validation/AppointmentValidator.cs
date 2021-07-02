@@ -11,7 +11,7 @@ namespace AppointmentValidationSystem
         protected readonly IAppointmentParameters _appointmentParameters;
         protected readonly IAppointmentsRepository _appointmentsRepository;
         protected readonly IEquipmentAvailabilityService _equipmentAvailabiltyService;
-        protected IList<ValidationError> ValidationErrors { get; }
+        protected List<ValidationError> ValidationErrors { get; }
 
         public AppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService)
         {

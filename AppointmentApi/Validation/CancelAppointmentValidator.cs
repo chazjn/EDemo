@@ -21,18 +21,18 @@ namespace AppointmentApi.Validation
             
             if (_appointmentsRepository.GetPatient(appointment.PatientId) == null)
             {
-                AddValidationError($"Appointment on {appointment.DateTime} does not exist");
+                AddValidationError($"Patient Id {appointment.PatientId} does not exist");
             }
 
             if (_appointmentsRepository.GetAppointment(appointment) == null)
             {
-                AddValidationError($"Patient Id {appointment.PatientId} does not exist");
+                AddValidationError($"Appointment on {appointment.DateTime} does not exist");
             }
 
             var cutoff = DateTime.Now + _appointmentParameters.CanCancelBefore;
             if(appointment.DateTime < cutoff)
             {
-                AddValidationError($"Cannot cancel appointments made before {cutoff}");
+                AddValidationError($"Cannot cancel appointments that are booked before {cutoff}");
             }
 
             return ValidationErrors;
