@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AppointmentApi.Db;
+using AppointmentApi.Db.Models;
 using AppointmentApi.Dto;
 using AppointmentApi.Validation;
 using EmailNotificationSystem;
@@ -28,9 +30,9 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IList<AppointmentDto>> Get()
+        public async Task<ActionResult<IList<AppointmentDto>>> Get()
         {
-            var list = _appointmentsRepository.GetAppointmentsByDate(DateTime.Now.Date);
+            var list = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
             return Ok(list);
         }
 

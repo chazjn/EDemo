@@ -4,6 +4,7 @@ using AppointmentApi.Db.Models;
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace AppointmentApi.Db
 {
@@ -28,10 +29,16 @@ namespace AppointmentApi.Db
                                                              && x.IsDeleted == false).SingleOrDefault();
         }
 
-        public IList<Appointment> GetAppointmentsByDate(DateTime date)
+        public Task<List<AppointmentDto>> GetAppointmentsByDateAsync(DateTime date)
         {
-            return _appointmentsContext.Appointments.Where(x => x.IsDeleted == false
-                                                             && x.DateTime.Date == date.Date).ToList();
+            var appointments = _appointmentsContext.Appointments.Where(x => x.IsDeleted == false 
+                                                                         && x.DateTime.Date == date.Date)
+                                                                        .Select(x => new AppointmentDto
+                                                                        {
+                                                                            PatientId = x.PatientId,
+                                                                            DateTime = x.DateTime
+                                                                        });
+            return appointments.ToListAsync();
         }
 
         public void CreateAppointment(AppointmentDto Dto, int equipmentId)

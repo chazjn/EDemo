@@ -2,6 +2,7 @@
 using AppointmentApi.Db.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AppointmentApi.Db
 {
@@ -11,7 +12,7 @@ namespace AppointmentApi.Db
 
         Appointment GetAppointment(AppointmentDto appointment);
 
-        public IList<Appointment> GetAppointmentsByDate(DateTime date);
+        Task<List<AppointmentDto>> GetAppointmentsByDateAsync(DateTime date);
 
         void CreateAppointment(AppointmentDto Dto, int equipmentId);
 
