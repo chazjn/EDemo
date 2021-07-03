@@ -7,19 +7,24 @@ using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
 {
-    public class CreateAppointmentValidator: AppointmentValidator
+    public class CreateAppointmentValidator: AppointmentValidator<CreateAppointmentDto>
     {
         public CreateAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate<AppointmentDto>(AppointmentDto appointment)
+        public override IList<ValidationError> Validate(CreateAppointmentDto appointment)
         {
             //TODO: check datetime is on the hour
             //check datetime start time
             //check days befor
             //check user exists
             //check equipment is available
+
+            if(appointment.DateTime.Minute != 0)
+            {
+                AddValidationError($"Appointment must be made on the hour");
+            }
 
             if(appointment.DateTime.TimeOfDay < _appointmentParameters.FirstAppointmentTimeOfDay
             || appointment.DateTime.TimeOfDay > _appointmentParameters.LastAppointmentTimeOfDay)
@@ -30,7 +35,7 @@ namespace AppointmentApi.Validation
             var cutoffDateTime = (DateTime.Now + _appointmentParameters.CanCreateBefore) - _appointmentParameters.AppointmentLength;
             if (appointment.DateTime > cutoffDateTime)
             {
-                AddValidationError($"Appointment be made after {cutoffDateTime}");
+                AddValidationError($"Appointment cannot be made after {cutoffDateTime}");
             }
 
             if (_appointmentsRepository.GetPatientAsync(appointment.PatientId).Result == null)

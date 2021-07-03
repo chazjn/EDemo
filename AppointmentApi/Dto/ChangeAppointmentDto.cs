@@ -2,7 +2,7 @@
 
 namespace AppointmentApi.Dto
 {
-    public class AppointmentChangeDto : AppointmentDto
+    public class ChangeAppointmentDto : CreateAppointmentDto
     {
         public DateTime NewDateTime { get; set; }
     }

@@ -31,10 +31,10 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<AppointmentDto>>> Get()
+        public async Task<ActionResult<IList<CreateAppointmentDto>>> Get()
         {
             var appointmentList = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
-            var appointmentDtoList = appointmentList.Select(x => new AppointmentDto
+            var appointmentDtoList = appointmentList.Select(x => new CreateAppointmentDto
             {
                 PatientId = x.PatientId,
                 DateTime = x.DateTime
@@ -45,9 +45,9 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(AppointmentDto appointmentDto)
+        public async Task<IActionResult> Create(CreateAppointmentDto appointmentDto)
         {
-            var validator = _validatorFactory.Build(Validator.Create);
+            var validator = _validatorFactory.Build(appointmentDto);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)
@@ -72,9 +72,9 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Change")]
-        public async Task<IActionResult> Change(AppointmentChangeDto appointmentDto)
+        public async Task<IActionResult> Change(ChangeAppointmentDto appointmentDto)
         {
-            var validator = _validatorFactory.Build(Validator.Change);
+            var validator = _validatorFactory.Build(appointmentDto);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)
@@ -92,9 +92,9 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Cancel")]
-        public async Task<IActionResult> Cancel(AppointmentDto appointmentDto)
+        public async Task<IActionResult> Cancel(CancelAppointmentDto appointmentDto)
         {
-            var validator = _validatorFactory.Build(Validator.Cancel);
+            var validator = _validatorFactory.Build(appointmentDto);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)

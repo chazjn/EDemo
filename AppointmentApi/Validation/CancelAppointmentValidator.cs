@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
 {
-    public class CancelAppointmentValidator : AppointmentValidator
+    public class CancelAppointmentValidator : AppointmentValidator<CancelAppointmentDto>
     {
         public CancelAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate<AppointmentDto>(AppointmentDto appointment)
+        public override IList<ValidationError> Validate(CancelAppointmentDto appointment)
         {
             //patient exists
             //appointment exists

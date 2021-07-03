@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace AppointmentApi.Validation
 {
-    public class ChangeAppointmentValidator : AppointmentValidator
+    public class ChangeAppointmentValidator : AppointmentValidator<ChangeAppointmentDto>
     {
         public ChangeAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate<AppointmentChangeDto>(AppointmentChangeDto appointment)
+        public override IList<ValidationError> Validate(ChangeAppointmentDto appointment)
         {
             //Same as create
             //2 days before
@@ -24,8 +24,13 @@ namespace AppointmentApi.Validation
             var createAppointmentErrors = createAppointmentValidator.Validate(appointment);
             ValidationErrors.AddRange(createAppointmentErrors);
 
+            if (appointment.NewDateTime.Minute != 0)
+            {
+                AddValidationError($"Appointment must be made on the hour");
+            }
+
             var cutoff = DateTime.Now + _appointmentParameters.CanChangeBefore;
-            if (appointment.DateTime < cutoff)
+            if (appointment.NewDateTime < cutoff)
             {
                 AddValidationError($"Cannot change appointments that are booked before {cutoff}");
             }

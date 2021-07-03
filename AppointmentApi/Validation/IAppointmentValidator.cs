@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
 {
-    public interface IAppointmentValidator
+    public interface IAppointmentValidator<T>
     {
-        IList<ValidationError> Validate<T>(T appointment) where T : AppointmentDto;
+        IList<ValidationError> Validate(T appointment);
     }
 }

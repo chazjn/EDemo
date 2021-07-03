@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AppointmentValidationSystem
 {
-    public abstract class AppointmentValidator : IAppointmentValidator
+    public abstract class AppointmentValidator<T> : IAppointmentValidator<T>
     {
         protected readonly IAppointmentParameters _appointmentParameters;
         protected readonly IAppointmentsRepository _appointmentsRepository;
@@ -21,7 +21,7 @@ namespace AppointmentValidationSystem
             ValidationErrors = new List<ValidationError>();
         }
 
-        public abstract IList<ValidationError> Validate<T>(T appointment) where T : AppointmentDto;
+        public abstract IList<ValidationError> Validate(T appointment);
 
         protected void AddValidationError(string message)
         {

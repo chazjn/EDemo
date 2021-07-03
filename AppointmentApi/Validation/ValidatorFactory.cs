@@ -1,4 +1,5 @@
 ﻿using AppointmentApi.Db;
+using AppointmentApi.Dto;
 using EquipmentAvailabilty;
 using System;
 
@@ -17,14 +18,14 @@ namespace AppointmentApi.Validation
             _equipmentAvailabiltyService = equipmentAvailabiltyService;
         }
 
-        public IAppointmentValidator Build(Validator validator)
+        public IAppointmentValidator<T> Build<T>(T appointment)
         {
-            return validator switch
+            return (typeof(T)) switch
             {
-                Validator.Create => new CreateAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
-                Validator.Change => new ChangeAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
-                Validator.Cancel => new CancelAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
-                _ => throw new ArgumentException($"No validator found for type '{validator}'"),
+                var type when type == typeof(CreateAppointmentDto) => new CreateAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService) as IAppointmentValidator<T>,
+                var type when type == typeof(ChangeAppointmentDto) => new ChangeAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService) as IAppointmentValidator<T>,
+                var type when type == typeof(CancelAppointmentDto) => new CancelAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService) as IAppointmentValidator<T>,
+                _ => throw new ArgumentException($"No validator found for type '{typeof(T)}'"),
             };
         }
     }
