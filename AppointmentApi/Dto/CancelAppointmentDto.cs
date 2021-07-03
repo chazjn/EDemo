@@ -2,9 +2,7 @@
 
 namespace AppointmentApi.Dto
 {
-    public class CancelAppointmentDto : IAppointmentDto
+    public class CancelAppointmentDto : AppointmentDto
     {
-        public int PatientId { get; set; }
-        public DateTime DateTime { get; set; }
     }
 }

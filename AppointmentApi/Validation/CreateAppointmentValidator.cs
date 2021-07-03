@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
 {
-    public class CreateAppointmentValidator: AppointmentValidator<CreateAppointmentDto>
+    public class CreateAppointmentValidator: AppointmentValidator<AppointmentDto>
     {
         public CreateAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
         {
         }
 
-        public override IList<ValidationError> Validate(CreateAppointmentDto appointment)
+        public override IList<ValidationError> Validate(AppointmentDto appointment)
         {
             //TODO: check datetime is on the hour
             //check datetime start time

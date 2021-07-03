@@ -2,7 +2,7 @@
 
 namespace AppointmentApi.Dto
 {
-    public class CreateAppointmentDto : IAppointmentDto
+    public class AppointmentDto
     {
         public int PatientId { get; set; }
         public DateTime DateTime { get; set; }

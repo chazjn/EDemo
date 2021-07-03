@@ -22,7 +22,7 @@ namespace AppointmentApi.Db
             return await _appointmentsContext.Patients.Where(x => x.Id == patientId).SingleOrDefaultAsync();
         }
 
-        public async Task<Appointment> GetAppointmentAsync(IAppointmentDto appointmentDto)
+        public async Task<Appointment> GetAppointmentAsync(AppointmentDto appointmentDto)
         {
             var appointment = _appointmentsContext.Appointments.Where(x => x.PatientId == appointmentDto.PatientId
                                                                         && x.DateTime == appointmentDto.DateTime
@@ -39,7 +39,7 @@ namespace AppointmentApi.Db
             return await appointments.ToListAsync();
         }
 
-        public async Task CreateAppointmentAsync(IAppointmentDto Dto, int equipmentId)
+        public async Task CreateAppointmentAsync(AppointmentDto Dto, int equipmentId)
         {
             _appointmentsContext.Appointments.Add(new Appointment
             {
@@ -60,7 +60,7 @@ namespace AppointmentApi.Db
             }
         }
 
-        public async Task CancelAppointmentAsync(IAppointmentDto appointmentDto)
+        public async Task CancelAppointmentAsync(CancelAppointmentDto appointmentDto)
         {
             var appointment = await GetAppointmentAsync(appointmentDto);
             if(appointment != null)

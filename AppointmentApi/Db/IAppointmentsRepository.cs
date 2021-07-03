@@ -10,14 +10,14 @@ namespace AppointmentApi.Db
     {
         Task<Patient> GetPatientAsync(int patientId);
 
-        Task<Appointment> GetAppointmentAsync(IAppointmentDto appointment);
+        Task<Appointment> GetAppointmentAsync(AppointmentDto appointment);
 
         Task<List<Appointment>> GetAppointmentsByDateAsync(DateTime date);
 
-        Task CreateAppointmentAsync(IAppointmentDto Dto, int equipmentId);
+        Task CreateAppointmentAsync(AppointmentDto Dto, int equipmentId);
 
         Task ChangeAppointmentAsync(ChangeAppointmentDto appointmentDto);
 
-        Task CancelAppointmentAsync(IAppointmentDto appointmentDto);
+        Task CancelAppointmentAsync(CancelAppointmentDto appointmentDto);
     }
 }

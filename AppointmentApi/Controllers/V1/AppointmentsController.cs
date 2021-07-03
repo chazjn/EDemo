@@ -31,10 +31,10 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<CreateAppointmentDto>>> Get()
+        public async Task<ActionResult<IList<AppointmentDto>>> Get()
         {
             var appointmentList = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
-            var appointmentDtoList = appointmentList.Select(x => new CreateAppointmentDto
+            var appointmentDtoList = appointmentList.Select(x => new AppointmentDto
             {
                 PatientId = x.PatientId,
                 DateTime = x.DateTime
@@ -45,7 +45,7 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(CreateAppointmentDto appointmentDto)
+        public async Task<IActionResult> Create(AppointmentDto appointmentDto)
         {
             var validator = _validatorFactory.Build(appointmentDto);
             var errors = validator.Validate(appointmentDto);
