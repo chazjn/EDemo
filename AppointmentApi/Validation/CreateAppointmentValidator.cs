@@ -33,7 +33,7 @@ namespace AppointmentApi.Validation
                 AddValidationError($"Appointment be made after {cutoffDateTime}");
             }
 
-            if (_appointmentsRepository.GetPatient(appointment.PatientId) == null)
+            if (_appointmentsRepository.GetPatientAsync(appointment.PatientId).Result == null)
             {
                 AddValidationError($"Patient Id {appointment.PatientId} does not exist");
             }

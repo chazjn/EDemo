@@ -8,16 +8,16 @@ namespace AppointmentApi.Db
 {
     public interface IAppointmentsRepository
     {
-        Patient GetPatient(int patientId);
+        Task<Patient> GetPatientAsync(int patientId);
 
-        Appointment GetAppointment(AppointmentDto appointment);
+        Task<Appointment> GetAppointmentAsync(AppointmentDto appointment);
 
-        Task<List<AppointmentDto>> GetAppointmentsByDateAsync(DateTime date);
+        Task<List<Appointment>> GetAppointmentsByDateAsync(DateTime date);
 
-        void CreateAppointment(AppointmentDto Dto, int equipmentId);
+        Task CreateAppointmentAsync(AppointmentDto Dto, int equipmentId);
 
-        void ChangeAppointment(AppointmentChangeDto appointmentChangeDto);
+        Task ChangeAppointmentAsync(AppointmentChangeDto appointmentChangeDto);
 
-        void CancelAppointment(AppointmentDto appointmentDto);
+        Task CancelAppointmentAsync(AppointmentDto appointmentDto);
     }
 }

@@ -17,31 +17,29 @@ namespace AppointmentApi.Db
             _appointmentsContext = appointmentsContext;
         }
 
-        public Patient GetPatient(int patientId)
+        public async Task<Patient> GetPatientAsync(int patientId)
         {
-            return _appointmentsContext.Patients.Where(x => x.Id == patientId).SingleOrDefault();
+            return await _appointmentsContext.Patients.Where(x => x.Id == patientId).SingleOrDefaultAsync();
         }
 
-        public Appointment GetAppointment(AppointmentDto appointment)
+        public async Task<Appointment> GetAppointmentAsync(AppointmentDto appointmentDto)
         {
-            return _appointmentsContext.Appointments.Where(x => x.PatientId == appointment.PatientId
-                                                             && x.DateTime == appointment.DateTime
-                                                             && x.IsDeleted == false).SingleOrDefault();
+            var appointment = _appointmentsContext.Appointments.Where(x => x.PatientId == appointmentDto.PatientId
+                                                                        && x.DateTime == appointmentDto.DateTime
+                                                                        && x.IsDeleted == false).SingleOrDefaultAsync();
+
+            return await appointment;
         }
 
-        public Task<List<AppointmentDto>> GetAppointmentsByDateAsync(DateTime date)
+        public async Task<List<Appointment>> GetAppointmentsByDateAsync(DateTime date)
         {
-            var appointments = _appointmentsContext.Appointments.Where(x => x.IsDeleted == false 
-                                                                         && x.DateTime.Date == date.Date)
-                                                                        .Select(x => new AppointmentDto
-                                                                        {
-                                                                            PatientId = x.PatientId,
-                                                                            DateTime = x.DateTime
-                                                                        });
-            return appointments.ToListAsync();
+            var appointments = _appointmentsContext.Appointments.Where(x => x.IsDeleted == false
+                                                                         && x.DateTime.Date == date.Date);
+                                                                     
+            return await appointments.ToListAsync();
         }
 
-        public void CreateAppointment(AppointmentDto Dto, int equipmentId)
+        public async Task CreateAppointmentAsync(AppointmentDto Dto, int equipmentId)
         {
             _appointmentsContext.Appointments.Add(new Appointment
             {
@@ -49,26 +47,26 @@ namespace AppointmentApi.Db
                 EquipmentId = equipmentId,
                 DateTime = Dto.DateTime
             });
-            _appointmentsContext.SaveChanges();
+            await _appointmentsContext.SaveChangesAsync();
         }
 
-        public void ChangeAppointment(AppointmentChangeDto appointmentChangeDto)
+        public async Task ChangeAppointmentAsync(AppointmentChangeDto appointmentChangeDto)
         {
-            var appointment = GetAppointment(appointmentChangeDto);
+            var appointment = await GetAppointmentAsync(appointmentChangeDto);
             if(appointment != null)
             {
                 appointment.DateTime = appointmentChangeDto.NewDateTime;
-                _appointmentsContext.SaveChanges();
+                await _appointmentsContext.SaveChangesAsync();
             }
         }
 
-        public void CancelAppointment(AppointmentDto appointmentDto)
+        public async Task CancelAppointmentAsync(AppointmentDto appointmentDto)
         {
-            var appointment = GetAppointment(appointmentDto);
+            var appointment = await GetAppointmentAsync(appointmentDto);
             if(appointment != null)
             {
                 appointment.IsDeleted = true;
-                _appointmentsContext.SaveChanges();
+                await _appointmentsContext.SaveChangesAsync();
             }
         }
     }

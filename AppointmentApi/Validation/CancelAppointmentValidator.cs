@@ -18,13 +18,13 @@ namespace AppointmentApi.Validation
             //patient exists
             //appointment exists
             //3 days before
-            
-            if (_appointmentsRepository.GetPatient(appointment.PatientId) == null)
+
+            if (_appointmentsRepository.GetPatientAsync(appointment.PatientId).Result == null)
             {
                 AddValidationError($"Patient Id {appointment.PatientId} does not exist");
             }
 
-            if (_appointmentsRepository.GetAppointment(appointment) == null)
+            if (_appointmentsRepository.GetAppointmentAsync(appointment).Result == null)
             {
                 AddValidationError($"Appointment on {appointment.DateTime} does not exist");
             }

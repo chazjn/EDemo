@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AppointmentApi.Db;
 using AppointmentApi.Db.Models;
@@ -32,13 +33,19 @@ namespace AppointmentApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<AppointmentDto>>> Get()
         {
-            var list = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
-            return Ok(list);
+            var appointmentList = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
+            var appointmentDtoList = appointmentList.Select(x => new AppointmentDto
+            {
+                PatientId = x.PatientId,
+                DateTime = x.DateTime
+            });
+
+            return Ok(appointmentDtoList);
         }
 
         [HttpPost]
         [Route("Create")]
-        public IActionResult Create(AppointmentDto appointmentDto)
+        public async Task<IActionResult> Create(AppointmentDto appointmentDto)
         {
             var validator = _validatorFactory.Build(Validator.Create);
             var errors = validator.Validate(appointmentDto);
@@ -50,8 +57,8 @@ namespace AppointmentApi.Controllers
             if(reserveRequest.Successful == false)
                 return BadRequest("Equipment unavailable");
 
-            _appointmentsRepository.CreateAppointment(appointmentDto, reserveRequest.EquipmentAvailability.EquipmentId);
-            var patient = _appointmentsRepository.GetPatient(appointmentDto.PatientId);
+            await _appointmentsRepository.CreateAppointmentAsync(appointmentDto, reserveRequest.EquipmentAvailability.EquipmentId);
+            var patient = await _appointmentsRepository.GetPatientAsync(appointmentDto.PatientId);
 
             _smtpClient.Send(new Email
             {
@@ -65,7 +72,7 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Change")]
-        public IActionResult Change(AppointmentChangeDto appointmentDto)
+        public async Task<IActionResult> Change(AppointmentChangeDto appointmentDto)
         {
             var validator = _validatorFactory.Build(Validator.Change);
             var errors = validator.Validate(appointmentDto);
@@ -78,14 +85,14 @@ namespace AppointmentApi.Controllers
                 return BadRequest("Equipment unavailable");
 
             _equipmentAvailabilityService.UnreserveEquipment(appointmentDto.DateTime);
-            _appointmentsRepository.ChangeAppointment(appointmentDto);
+            await _appointmentsRepository.ChangeAppointmentAsync(appointmentDto);
 
             return Ok();
         }
 
         [HttpPost]
         [Route("Cancel")]
-        public IActionResult Cancel(AppointmentDto appointmentDto)
+        public async Task<IActionResult> Cancel(AppointmentDto appointmentDto)
         {
             var validator = _validatorFactory.Build(Validator.Cancel);
             var errors = validator.Validate(appointmentDto);
@@ -93,7 +100,7 @@ namespace AppointmentApi.Controllers
             if (errors.Count > 0)
                 return BadRequest(errors);
 
-            _appointmentsRepository.CancelAppointment(appointmentDto);
+            await _appointmentsRepository.CancelAppointmentAsync(appointmentDto);
             _equipmentAvailabilityService.UnreserveEquipment(appointmentDto.DateTime);
 
             return Ok();
