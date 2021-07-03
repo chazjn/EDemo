@@ -38,7 +38,7 @@ namespace AppointmentApi.Controllers
         [Route("Create")]
         public IActionResult Create(AppointmentDto appointmentDto)
         {
-            var validator = _validatorFactory.Build("create");
+            var validator = _validatorFactory.Build(Validator.Create);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)
@@ -65,7 +65,7 @@ namespace AppointmentApi.Controllers
         [Route("Change")]
         public IActionResult Change(AppointmentChangeDto appointmentDto)
         {
-            var validator = _validatorFactory.Build("change");
+            var validator = _validatorFactory.Build(Validator.Change);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)
@@ -85,7 +85,7 @@ namespace AppointmentApi.Controllers
         [Route("Cancel")]
         public IActionResult Cancel(AppointmentDto appointmentDto)
         {
-            var validator = _validatorFactory.Build("cancel");
+            var validator = _validatorFactory.Build(Validator.Cancel);
             var errors = validator.Validate(appointmentDto);
 
             if (errors.Count > 0)

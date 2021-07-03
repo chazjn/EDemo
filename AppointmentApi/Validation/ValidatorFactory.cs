@@ -17,22 +17,15 @@ namespace AppointmentApi.Validation
             _equipmentAvailabiltyService = equipmentAvailabiltyService;
         }
 
-        public IAppointmentValidator Build(string type)
+        public IAppointmentValidator Build(Validator validator)
         {
-            switch (type)
+            return validator switch
             {
-                case "create":
-                    return new CreateAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService);
-
-                case "change":
-                    return new ChangeAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService);
-
-                case "cancel":
-                    return new CancelAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService);
-
-                default:
-                    throw new ArgumentException($"No validator found for type {type}");
-            }
+                Validator.Create => new CreateAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
+                Validator.Change => new ChangeAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
+                Validator.Cancel => new CancelAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService),
+                _ => throw new ArgumentException($"No validator found for type '{validator}'"),
+            };
         }
     }
 }

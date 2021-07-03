@@ -2,6 +2,6 @@
 {
     public interface IValidatorFactory
     {
-        IAppointmentValidator Build(string type);
+        IAppointmentValidator Build(Validator validator);
     }
 }
