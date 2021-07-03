@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using AppointmentApi.Db;
 using AppointmentApi.Validation;
+using AppointmentApi.Db.Models;
 
 namespace AppointmentApi
 {
@@ -90,6 +91,20 @@ namespace AppointmentApi
             });
 
             appointmentsContext.Database.Migrate();
+
+            appointmentsContext.Patients.Add(new Patient
+            {
+                Id = 1,
+                EmailAddress = "test1@example.com"
+            });
+
+            appointmentsContext.Patients.Add(new Patient
+            {
+                Id = 2,
+                EmailAddress = "test2@example.com"
+            });
+
+            appointmentsContext.SaveChanges();
         }
     }
 }
