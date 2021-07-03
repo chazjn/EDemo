@@ -60,7 +60,7 @@ namespace AppointmentApi.Controllers
             await _appointmentsRepository.CreateAppointmentAsync(appointmentDto, reserveRequest.EquipmentAvailability.EquipmentId);
             var patient = await _appointmentsRepository.GetPatientAsync(appointmentDto.PatientId);
 
-            _smtpClient.Send(new Email
+            await _smtpClient.SendAsync(new Email
             {
                 To = patient.EmailAddress,
                 Subject = "Successful booking",

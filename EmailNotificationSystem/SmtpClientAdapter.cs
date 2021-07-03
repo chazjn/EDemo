@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace EmailNotificationSystem
 {
@@ -11,7 +12,7 @@ namespace EmailNotificationSystem
             _settings = smtpClientSettings;
         }
 
-        public void Send(Email email)
+        public async Task SendAsync(Email email)
         {
             if(_settings.Enabled == false)
             {
@@ -23,7 +24,7 @@ namespace EmailNotificationSystem
             {
                 Body = email.Body
             };
-            smtpClient.SendMailAsync(message);
+            await smtpClient.SendMailAsync(message);
         }
     }
 }
