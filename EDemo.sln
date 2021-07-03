@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayApi.Internal", "Gate
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{22C3BE22-EC07-4F35-9EA4-7EB3E1299BEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailNotificationSystem", "EmailNotificationSystem\EmailNotificationSystem.csproj", "{E544D413-5766-467C-ABDA-CD4C833AC495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailNotificationSystem", "EmailNotificationSystem\EmailNotificationSystem.csproj", "{E544D413-5766-467C-ABDA-CD4C833AC495}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{B76CFD59-EE98-4687-9A8B-F11447B4E05B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{E544D413-5766-467C-ABDA-CD4C833AC495}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E544D413-5766-467C-ABDA-CD4C833AC495}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E544D413-5766-467C-ABDA-CD4C833AC495}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B76CFD59-EE98-4687-9A8B-F11447B4E05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76CFD59-EE98-4687-9A8B-F11447B4E05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76CFD59-EE98-4687-9A8B-F11447B4E05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76CFD59-EE98-4687-9A8B-F11447B4E05B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
