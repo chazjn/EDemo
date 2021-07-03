@@ -1,6 +1,10 @@
-﻿namespace AppointmentApi.Dto
+﻿using System;
+
+namespace AppointmentApi.Dto
 {
-    public class CancelAppointmentDto : CreateAppointmentDto
+    public class CancelAppointmentDto : IAppointmentDto
     {
+        public int PatientId { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
