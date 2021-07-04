@@ -91,19 +91,8 @@ namespace AppointmentApi
             });
 
             appointmentsContext.Database.Migrate();
-
-            appointmentsContext.Patients.Add(new Patient
-            {
-                Id = 1,
-                EmailAddress = "test1@example.com"
-            });
-
-            appointmentsContext.Patients.Add(new Patient
-            {
-                Id = 2,
-                EmailAddress = "test2@example.com"
-            });
-
+            appointmentsContext.Patients.Add(new Patient { EmailAddress = "test1@example.com" });
+            appointmentsContext.Patients.Add(new Patient { EmailAddress = "test2@example.com" });
             appointmentsContext.SaveChanges();
         }
     }
