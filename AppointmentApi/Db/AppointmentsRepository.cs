@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using AppointmentApi.Validation;
+using AppointmentApi.Validation.ValidationErrors;
 
 namespace AppointmentApi.Db
 {
@@ -39,35 +41,77 @@ namespace AppointmentApi.Db
             return await appointments.ToListAsync();
         }
 
-        public async Task CreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId)
+        public async Task<IList<ValidationError>> TryCreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId)
         {
-            _appointmentsContext.Appointments.Add(new Appointment
-            {
-                PatientId = patientId,
-                EquipmentId = equipmentId,
-                DateTime = dateTime
-            });
-            await _appointmentsContext.SaveChangesAsync();
-        }
+            var errors = new List<ValidationError>();
 
-        public async Task ChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime)
-        {
-            var appointment = await GetAppointmentAsync(patientId, previousDateTime);
-            if(appointment != null)
+            var patient = GetPatientAsync(patientId);
+            if (patient == null)
+                errors.Add(new PatientDoesNotExist(patientId));
+
+            var appointment = await GetAppointmentAsync(patientId, dateTime);
+            if (appointment != null)
+                errors.Add(new AppointmentAlreadyExists(patientId, dateTime));
+
+            if(patient != null && appointment == null)
             {
-                appointment.DateTime = newDateTime;
+                _appointmentsContext.Appointments.Add(new Appointment
+                {
+                    PatientId = patientId,
+                    EquipmentId = equipmentId,
+                    DateTime = dateTime
+                });
                 await _appointmentsContext.SaveChangesAsync();
             }
+
+            return errors;
         }
 
-        public async Task CancelAppointmentAsync(int patientId, DateTime dateTime)
+        public async Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime)
         {
+            var errors = new List<ValidationError>();
+
+            var patient = GetPatientAsync(patientId);
+            if (patient == null)
+                errors.Add(new PatientDoesNotExist(patientId));
+
+            var previousAppointment = await GetAppointmentAsync(patientId, previousDateTime);
+            if (previousAppointment == null)
+                errors.Add(new AppointmentDoesNotExist(patientId, previousDateTime));
+
+            var newAppointment = await GetAppointmentAsync(patientId, newDateTime);
+            if (newAppointment != null)
+                errors.Add(new AppointmentAlreadyExists(patientId, newDateTime));
+            
+            if(newAppointment == null && previousAppointment != null)
+            {
+                previousAppointment.DateTime = newDateTime;
+                await _appointmentsContext.SaveChangesAsync();
+            }
+
+            return errors;
+        }
+
+        public async Task<IList<ValidationError>> TryCancelAppointmentAsync(int patientId, DateTime dateTime)
+        {
+            var errors = new List<ValidationError>();
+
+            var patient = GetPatientAsync(patientId);
+            if (patient == null)
+                errors.Add(new PatientDoesNotExist(patientId));
+            
             var appointment = await GetAppointmentAsync(patientId, dateTime);
-            if(appointment != null)
+            if (appointment == null)
+            {
+                errors.Add(new AppointmentDoesNotExist(patientId, dateTime));
+            }
+            else
             {
                 appointment.IsDeleted = true;
                 await _appointmentsContext.SaveChangesAsync();
             }
+                
+            return errors;
         }
     }
 }

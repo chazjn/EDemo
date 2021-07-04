@@ -3,6 +3,7 @@ using AppointmentApi.Db.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AppointmentApi.Validation;
 
 namespace AppointmentApi.Db
 {
@@ -14,10 +15,10 @@ namespace AppointmentApi.Db
 
         Task<List<Appointment>> GetAppointmentsByDateAsync(DateTime date);
 
-        Task CreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId);
+        Task<IList<ValidationError>>  TryCreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId);
 
-        Task ChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime);
+        Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime);
 
-        Task CancelAppointmentAsync(int patientId, DateTime dateTime);
+        Task<IList<ValidationError>> TryCancelAppointmentAsync(int patientId, DateTime dateTime);
     }
 }

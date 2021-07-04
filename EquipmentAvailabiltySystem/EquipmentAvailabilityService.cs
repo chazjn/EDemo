@@ -65,7 +65,11 @@ namespace EquipmentAvailabiltySystem
 
             if (availability.Count > 0)
             {
-                availability.First().IsAvailable = true;
+                var item = availability.FirstOrDefault(a => a.IsAvailable == false);
+                if(item != null)
+                {
+                    item.IsAvailable = true;
+                }
             }
         }
     }

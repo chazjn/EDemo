@@ -46,27 +46,26 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(AppointmentDto appointmentDto)
+        public async Task<IActionResult> Create(AppointmentDto dto)
         {
-            var validator = _validatorFactory.Build(appointmentDto);
-            var errors = validator.Validate(appointmentDto);
-            if (errors.Count > 0)
-                return BadRequest(errors);
+            var validator = _validatorFactory.Build(dto);
+            var validationErrors = validator.Validate(dto);
+            if (validationErrors.Count > 0)
+                return BadRequest(validationErrors);
 
-            var patient = await _appointmentsRepository.GetPatientAsync(appointmentDto.PatientId);
-            if (patient == null)
-                return BadRequest(new[] { new PatientDoesNotExist(appointmentDto.PatientId) });
-
-            var appointment = await _appointmentsRepository.GetAppointmentAsync(appointmentDto.PatientId, appointmentDto.DateTime);
-            if(appointment != null)
-                return BadRequest(new[] { new AppointmentAlreadyExists(appointmentDto.PatientId, appointmentDto.DateTime) });
-
-            var reserveRequest = _equipmentAvailabilityService.ReserveEquipment(appointmentDto.DateTime);
+            var reserveRequest = _equipmentAvailabilityService.ReserveEquipment(dto.DateTime);
             if(reserveRequest.Successful == false)
-                return BadRequest(new[] { new EquipmentUnavailable(appointmentDto.DateTime) });
+                return BadRequest(new[] { new EquipmentUnavailable(dto.DateTime) });
 
-            await _appointmentsRepository.CreateAppointmentAsync(appointmentDto.PatientId, appointmentDto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
-            
+            var createErrors = await _appointmentsRepository.TryCreateAppointmentAsync(dto.PatientId, dto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
+            if(createErrors.Count > 0)
+            {
+                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
+                return BadRequest(createErrors);
+            }
+
+            var patient = await _appointmentsRepository.GetPatientAsync(dto.PatientId);
+
             await _smtpClient.SendAsync(new Email
             {
                 To = patient.EmailAddress,
@@ -79,59 +78,43 @@ namespace AppointmentApi.Controllers
 
         [HttpPost]
         [Route("Change")]
-        public async Task<IActionResult> Change(ChangeAppointmentDto appointmentDto)
+        public async Task<IActionResult> Change(ChangeAppointmentDto dto)
         {
-            var validator = _validatorFactory.Build(appointmentDto);
-            var errors = validator.Validate(appointmentDto);
-            if (errors.Count > 0)
-                return BadRequest(errors);
+            var validator = _validatorFactory.Build(dto);
+            var validationErrors = validator.Validate(dto);
+            if (validationErrors.Count > 0)
+                return BadRequest(validationErrors);
 
-
-            var patient = await _appointmentsRepository.GetPatientAsync(appointmentDto.PatientId);
-            if (patient == null)
-                return BadRequest(new[] { new PatientDoesNotExist(patient.Id) });
-
-
-            var previousAppointment = await _appointmentsRepository.GetAppointmentAsync(appointmentDto.PatientId, appointmentDto.PreviousDateTime);
-            if (previousAppointment == null)
-                return BadRequest(new[] { new AppointmentDoesNotExist(appointmentDto.PatientId, appointmentDto.DateTime) });
-
-
-            var newAppointment = await _appointmentsRepository.GetAppointmentAsync(appointmentDto.PatientId, appointmentDto.DateTime);
-            if (newAppointment == null)
-                return BadRequest(new[] { new AppointmentAlreadyExists(appointmentDto.PatientId, appointmentDto.DateTime) });
-
-
-            var reserveRequest = _equipmentAvailabilityService.ReserveEquipment(appointmentDto.DateTime);
+            var reserveRequest = _equipmentAvailabilityService.ReserveEquipment(dto.DateTime);
             if (reserveRequest.Successful == false)
-                return BadRequest(new[] { new EquipmentUnavailable(appointmentDto.DateTime) });
+                return BadRequest(new[] { new EquipmentUnavailable(dto.DateTime) });
 
-
-            _equipmentAvailabilityService.UnreserveEquipment(appointmentDto.DateTime);
-            await _appointmentsRepository.ChangeAppointmentAsync(appointmentDto.PatientId, appointmentDto.PreviousDateTime, appointmentDto.DateTime);
-
+            var changeErrors = await _appointmentsRepository.TryChangeAppointmentAsync(dto.PatientId, dto.PreviousDateTime, dto.DateTime);
+            if (changeErrors.Count > 0)
+            {
+                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
+                return BadRequest(changeErrors);
+            }
+                
+            _equipmentAvailabilityService.UnreserveEquipment(dto.PreviousDateTime);
+            
             return Ok();
         }
 
         [HttpPost]
         [Route("Cancel")]
-        public async Task<IActionResult> Cancel(CancelAppointmentDto appointmentDto)
+        public async Task<IActionResult> Cancel(CancelAppointmentDto dto)
         {
-            var validator = _validatorFactory.Build(appointmentDto);
-            var errors = validator.Validate(appointmentDto);
-            if (errors.Count > 0)
-                return BadRequest(errors);
+            var validator = _validatorFactory.Build(dto);
+            var validationErrors = validator.Validate(dto);
+            if (validationErrors.Count > 0)
+                return BadRequest(validationErrors);
 
-            var patient = await _appointmentsRepository.GetPatientAsync(appointmentDto.PatientId);
-            if (patient == null)
-                return BadRequest(new[] { new PatientDoesNotExist(patient.Id) });
+            var cancelErrors = await _appointmentsRepository.TryCancelAppointmentAsync(dto.PatientId, dto.DateTime);
+            if(cancelErrors.Count > 0)
+                return BadRequest(validationErrors);
 
-            var appointment = await _appointmentsRepository.GetAppointmentAsync(appointmentDto.PatientId, appointmentDto.DateTime);
-            if (appointment == null)
-                return BadRequest(new[] { new AppointmentDoesNotExist(appointmentDto.PatientId, appointmentDto.DateTime) });
-
-            await _appointmentsRepository.CancelAppointmentAsync(appointmentDto.PatientId, appointment.DateTime);
-            _equipmentAvailabilityService.UnreserveEquipment(appointmentDto.DateTime);
+            _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
 
             return Ok();
         }
