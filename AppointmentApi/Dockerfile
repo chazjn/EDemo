@@ -7,7 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["AppointmentApi/AppointmentApi.csproj", "AppointmentApi/"]
-COPY ["EquipmentAvailabilty/EquipmentAvailabilty.csproj", "EquipmentAvailabilty/"]
+COPY ["EquipmentAvailabiltySystem/EquipmentAvailabiltySystem.csproj", "EquipmentAvailabiltySystem/"]
 RUN dotnet restore "AppointmentApi/AppointmentApi.csproj"
 COPY . .
 WORKDIR "/src/AppointmentApi"
