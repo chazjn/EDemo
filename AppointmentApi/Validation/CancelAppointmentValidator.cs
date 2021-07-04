@@ -1,7 +1,5 @@
-﻿using AppointmentApi.Db;
-using AppointmentApi.Dto;
+﻿using AppointmentApi.Dto;
 using AppointmentValidationSystem;
-using EquipmentAvailabiltySystem;
 using System;
 using System.Collections.Generic;
 
@@ -9,26 +7,12 @@ namespace AppointmentApi.Validation
 {
     public class CancelAppointmentValidator : AppointmentValidator<CancelAppointmentDto>
     {
-        public CancelAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
+        public CancelAppointmentValidator(IAppointmentParameters appointmentParameters) : base(appointmentParameters)
         {
         }
 
         public override IList<ValidationError> Validate(CancelAppointmentDto appointment)
         {
-            //patient exists
-            //appointment exists
-            //3 days before
-
-            if (_appointmentsRepository.GetPatientAsync(appointment.PatientId).Result == null)
-            {
-                AddValidationError($"Patient Id {appointment.PatientId} does not exist");
-            }
-
-            if (_appointmentsRepository.GetAppointmentAsync(appointment).Result == null)
-            {
-                AddValidationError($"Appointment on {appointment.DateTime} does not exist");
-            }
-
             var cutoff = DateTime.Now + _appointmentParameters.CanCancelBefore;
             if(appointment.DateTime < cutoff)
             {

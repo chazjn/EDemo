@@ -57,24 +57,5 @@ namespace UnitTests.AppointmentApi.Validation
 
             Assert.That(errors.Count == 1 && errors.First().Message.Contains("Appointment must be between"));
         }
-
-        [Test]
-        public void Validate_WhenCalledWithInvalidPatient_ReturnError()
-        {
-            //ensure equipment is available
-            EquipmentAvailabilityService = FakeServices.EquipmentAvailabilityService_WithAvailabilityOn(ValidAppointmentDateTime);
-
-            var appointmentValidator = GetValidator();
-
-            var appointment = new AppointmentDto
-            {
-                PatientId = 1,
-                DateTime = ValidAppointmentDateTime
-            };
-
-            var errors = appointmentValidator.Validate(appointment);
-
-            Assert.That(errors.Count == 1 && errors.First().Message.Contains("Patient Id 1 does not exist"));
-        }
     }
 }

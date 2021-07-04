@@ -11,7 +11,7 @@ namespace AppointmentApi.Validation
 {
     public class ChangeAppointmentValidator : AppointmentValidator<ChangeAppointmentDto>
     {
-        public ChangeAppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService) : base(appointmentParameters, appointmentsRepository, equipmentAvailabiltyService)
+        public ChangeAppointmentValidator(IAppointmentParameters appointmentParameters) : base(appointmentParameters)
         {
         }
 
@@ -20,7 +20,7 @@ namespace AppointmentApi.Validation
             //Same as create
             //2 days before
 
-            var createAppointmentValidator = new CreateAppointmentValidator(_appointmentParameters, _appointmentsRepository, _equipmentAvailabiltyService);
+            var createAppointmentValidator = new CreateAppointmentValidator(_appointmentParameters);
             var createAppointmentErrors = createAppointmentValidator.Validate(appointment);
             ValidationErrors.AddRange(createAppointmentErrors);
 

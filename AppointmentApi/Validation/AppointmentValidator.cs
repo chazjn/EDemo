@@ -1,7 +1,4 @@
-﻿using AppointmentApi.Db;
-using AppointmentApi.Dto;
-using AppointmentApi.Validation;
-using EquipmentAvailabiltySystem;
+﻿using AppointmentApi.Validation;
 using System.Collections.Generic;
 
 namespace AppointmentValidationSystem
@@ -9,15 +6,11 @@ namespace AppointmentValidationSystem
     public abstract class AppointmentValidator<T> : IAppointmentValidator<T>
     {
         protected readonly IAppointmentParameters _appointmentParameters;
-        protected readonly IAppointmentsRepository _appointmentsRepository;
-        protected readonly IEquipmentAvailabilityService _equipmentAvailabiltyService;
         protected List<ValidationError> ValidationErrors { get; }
 
-        public AppointmentValidator(IAppointmentParameters appointmentParameters, IAppointmentsRepository appointmentsRepository, IEquipmentAvailabilityService equipmentAvailabiltyService)
+        public AppointmentValidator(IAppointmentParameters appointmentParameters)
         {
             _appointmentParameters = appointmentParameters;
-            _appointmentsRepository = appointmentsRepository;
-            _equipmentAvailabiltyService = equipmentAvailabiltyService;
             ValidationErrors = new List<ValidationError>();
         }
 

@@ -41,9 +41,8 @@ namespace UnitTests.AppointmentApi.Validation
 
         protected CreateAppointmentValidator GetValidator()
         {
-            return new CreateAppointmentValidator(new StandardAppointmentParameters(),
-                                                  new AppointmentsRepository(AppointmentsContext),
-                                                  EquipmentAvailabilityService);
+            return new CreateAppointmentValidator(new StandardAppointmentParameters());
+                                               
         }
     }
 }
