@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace EquipmentAvailabilty
+namespace EquipmentAvailabiltySystem.Models
 {
-    public class EquipmentAvailability
+    class EquipmentItemBooking
     {
         public int EquipmentId { get; set; }
-        public bool IsAvailable { get; set; }
         public DateTime Date { get; set; }
     }
 }

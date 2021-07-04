@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EquipmentAvailabilty
+namespace EquipmentAvailabiltySystem
 {
     public interface IEquipmentAvailabilityService
     {

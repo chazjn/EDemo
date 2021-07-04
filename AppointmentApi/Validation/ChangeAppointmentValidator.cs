@@ -1,7 +1,7 @@
 ﻿using AppointmentApi.Db;
 using AppointmentApi.Dto;
 using AppointmentValidationSystem;
-using EquipmentAvailabilty;
+using EquipmentAvailabiltySystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

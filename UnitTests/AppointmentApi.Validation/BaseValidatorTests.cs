@@ -1,7 +1,7 @@
 ﻿using AppointmentApi.Db;
 using AppointmentApi.Db.Models;
 using AppointmentApi.Validation;
-using EquipmentAvailabilty;
+using EquipmentAvailabiltySystem;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

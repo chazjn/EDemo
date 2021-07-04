@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AppointmentApi.Db;
-using EquipmentAvailabilty;
+using EquipmentAvailabiltySystem;
 using EmailNotificationSystem;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using EquipmentAvailabilty.Models;
+using EquipmentAvailabiltySystem.Models;
 
-namespace EquipmentAvailabilty
+namespace EquipmentAvailabiltySystem
 {
     public class EquipmentAvailabilityService : IEquipmentAvailabilityService
     {

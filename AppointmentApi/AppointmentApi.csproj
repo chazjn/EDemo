@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmailNotificationSystem\EmailNotificationSystem.csproj" />
-    <ProjectReference Include="..\EquipmentAvailabilty\EquipmentAvailabilty.csproj" />
+    <ProjectReference Include="..\EquipmentAvailabiltySystem\EquipmentAvailabiltySystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace EquipmentAvailabilty.Models
+﻿namespace EquipmentAvailabiltySystem.Models
 {
     class EquipmentItem
     {

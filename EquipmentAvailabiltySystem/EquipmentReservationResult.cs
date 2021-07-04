@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EquipmentAvailabilty
+namespace EquipmentAvailabiltySystem
 {
     public class EquipmentReservationResult
     {

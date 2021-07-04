@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppointmentApi", "AppointmentApi\AppointmentApi.csproj", "{BB7BCE8C-5507-4421-A738-83640B026F25}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentAvailabilty", "EquipmentAvailabilty\EquipmentAvailabilty.csproj", "{0172D998-DFA6-46E5-A866-A6B317440174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentAvailabiltySystem", "EquipmentAvailabiltySystem\EquipmentAvailabiltySystem.csproj", "{0172D998-DFA6-46E5-A866-A6B317440174}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayApi.Public", "GatewayApi.Public\GatewayApi.Public.csproj", "{BB692AD8-121F-4449-B5BD-C50F0511F251}"
 EndProject

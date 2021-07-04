@@ -7,7 +7,7 @@ using AppointmentApi.Db.Models;
 using AppointmentApi.Dto;
 using AppointmentApi.Validation;
 using EmailNotificationSystem;
-using EquipmentAvailabilty;
+using EquipmentAvailabiltySystem;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentApi.Controllers
