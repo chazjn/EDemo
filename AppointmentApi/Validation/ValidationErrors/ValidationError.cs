@@ -1,6 +1,6 @@
 ﻿namespace AppointmentApi.Validation
 {
-    public class ValidationError
+    public abstract class ValidationError
     {
         public string Message { get; }
 

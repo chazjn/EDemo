@@ -1,6 +1,6 @@
 ﻿using AppointmentApi.Dto;
+using AppointmentApi.Validation.ValidationErrors;
 using AppointmentValidationSystem;
-using System;
 using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
@@ -13,10 +13,10 @@ namespace AppointmentApi.Validation
 
         public override IList<ValidationError> Validate(CancelAppointmentDto appointment)
         {
-            var cutoff = DateTime.Now + _appointmentParameters.CanCancelBefore;
-            if(appointment.DateTime < cutoff)
+            var cutoff = appointment.DateTime - _appointmentParameters.CanCancelBefore;
+            if (Now > cutoff)
             {
-                AddValidationError($"Cannot cancel appointments that are booked before {cutoff}");
+                AddValidationError(new AppointmentAmendmentOutOfRange(cutoff));
             }
 
             return ValidationErrors;

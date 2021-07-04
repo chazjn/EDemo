@@ -1,11 +1,7 @@
-﻿using AppointmentApi.Db;
-using AppointmentApi.Dto;
+﻿using AppointmentApi.Dto;
+using AppointmentApi.Validation.ValidationErrors;
 using AppointmentValidationSystem;
-using EquipmentAvailabiltySystem;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AppointmentApi.Validation
 {
@@ -17,22 +13,17 @@ namespace AppointmentApi.Validation
 
         public override IList<ValidationError> Validate(ChangeAppointmentDto appointment)
         {
-            //Same as create
-            //2 days before
-
-            var createAppointmentValidator = new CreateAppointmentValidator(_appointmentParameters);
+            var createAppointmentValidator = new CreateAppointmentValidator(_appointmentParameters)
+            {
+                Now = Now
+            };
             var createAppointmentErrors = createAppointmentValidator.Validate(appointment);
             ValidationErrors.AddRange(createAppointmentErrors);
 
-            if (appointment.NewDateTime.Minute != 0)
+            var cutoff = appointment.PreviousDateTime - _appointmentParameters.CanChangeBefore;
+            if (Now > cutoff)
             {
-                AddValidationError($"Appointment must be made on the hour");
-            }
-
-            var cutoff = DateTime.Now + _appointmentParameters.CanChangeBefore;
-            if (appointment.NewDateTime < cutoff)
-            {
-                AddValidationError($"Cannot change appointments that are booked before {cutoff}");
+                AddValidationError(new AppointmentAmendmentOutOfRange(cutoff));
             }
 
             return ValidationErrors;

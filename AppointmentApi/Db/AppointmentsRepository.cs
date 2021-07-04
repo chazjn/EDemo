@@ -22,10 +22,10 @@ namespace AppointmentApi.Db
             return await _appointmentsContext.Patients.Where(x => x.Id == patientId).SingleOrDefaultAsync();
         }
 
-        public async Task<Appointment> GetAppointmentAsync(AppointmentDto appointmentDto)
+        public async Task<Appointment> GetAppointmentAsync(int patientId, DateTime dateTime)
         {
-            var appointment = _appointmentsContext.Appointments.Where(x => x.PatientId == appointmentDto.PatientId
-                                                                        && x.DateTime == appointmentDto.DateTime
+            var appointment = _appointmentsContext.Appointments.Where(x => x.PatientId == patientId
+                                                                        && x.DateTime == dateTime
                                                                         && x.IsDeleted == false).SingleOrDefaultAsync();
 
             return await appointment;
@@ -39,30 +39,30 @@ namespace AppointmentApi.Db
             return await appointments.ToListAsync();
         }
 
-        public async Task CreateAppointmentAsync(AppointmentDto Dto, int equipmentId)
+        public async Task CreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId)
         {
             _appointmentsContext.Appointments.Add(new Appointment
             {
-                PatientId = Dto.PatientId,
+                PatientId = patientId,
                 EquipmentId = equipmentId,
-                DateTime = Dto.DateTime
+                DateTime = dateTime
             });
             await _appointmentsContext.SaveChangesAsync();
         }
 
-        public async Task ChangeAppointmentAsync(ChangeAppointmentDto appointmentChangeDto)
+        public async Task ChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime)
         {
-            var appointment = await GetAppointmentAsync(appointmentChangeDto);
+            var appointment = await GetAppointmentAsync(patientId, previousDateTime);
             if(appointment != null)
             {
-                appointment.DateTime = appointmentChangeDto.NewDateTime;
+                appointment.DateTime = newDateTime;
                 await _appointmentsContext.SaveChangesAsync();
             }
         }
 
-        public async Task CancelAppointmentAsync(CancelAppointmentDto appointmentDto)
+        public async Task CancelAppointmentAsync(int patientId, DateTime dateTime)
         {
-            var appointment = await GetAppointmentAsync(appointmentDto);
+            var appointment = await GetAppointmentAsync(patientId, dateTime);
             if(appointment != null)
             {
                 appointment.IsDeleted = true;

@@ -1,6 +1,6 @@
 ﻿using AppointmentApi.Dto;
+using AppointmentApi.Validation.ValidationErrors;
 using AppointmentValidationSystem;
-using System;
 using System.Collections.Generic;
 
 namespace AppointmentApi.Validation
@@ -13,24 +13,19 @@ namespace AppointmentApi.Validation
 
         public override IList<ValidationError> Validate(AppointmentDto appointment)
         {
-            //check datetime is on the hour
-            //check datetime start time
-            //check days before
-            if(appointment.DateTime.Minute != 0)
+            //ccheck datetime is on the hour and between the allowed times of data
+            if (appointment.DateTime.Minute != 0
+             || appointment.DateTime.TimeOfDay < _appointmentParameters.FirstAppointmentTimeOfDay
+             || appointment.DateTime.TimeOfDay > _appointmentParameters.LastAppointmentTimeOfDay)
             {
-                AddValidationError($"Appointment must be made on the hour");
+                AddValidationError(new AppointmentTimeInvalid(appointment.DateTime.TimeOfDay));
             }
 
-            if(appointment.DateTime.TimeOfDay < _appointmentParameters.FirstAppointmentTimeOfDay
-            || appointment.DateTime.TimeOfDay > _appointmentParameters.LastAppointmentTimeOfDay)
+            //check datetime is within the valid date range
+            var cutoffDateTime = (Now + _appointmentParameters.CanCreateBefore) - _appointmentParameters.AppointmentLength;
+            if (appointment.DateTime < Now || appointment.DateTime > cutoffDateTime)
             {
-                AddValidationError($"Appointment must be between {_appointmentParameters.FirstAppointmentTimeOfDay} and {_appointmentParameters.LastAppointmentTimeOfDay}");
-            }
-
-            var cutoffDateTime = (DateTime.Now + _appointmentParameters.CanCreateBefore) - _appointmentParameters.AppointmentLength;
-            if (appointment.DateTime > cutoffDateTime)
-            {
-                AddValidationError($"Appointment cannot be made after {cutoffDateTime}");
+                AddValidationError(new AppointmentCreateOutOfRange(Now, cutoffDateTime));
             }
 
             return ValidationErrors;

@@ -4,6 +4,6 @@ namespace AppointmentApi.Dto
 {
     public class ChangeAppointmentDto : AppointmentDto
     {
-        public DateTime NewDateTime { get; set; }
+        public DateTime PreviousDateTime { get; set; }
     }
 }

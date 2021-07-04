@@ -1,48 +1,39 @@
-﻿using AppointmentApi.Db;
-using AppointmentApi.Db.Models;
-using AppointmentApi.Validation;
-using EquipmentAvailabiltySystem;
-using NUnit.Framework;
+﻿using AppointmentApi.Validation;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTests.AppointmentApi.Validation
 {
     public abstract class BaseValidatorTests
     {
-        protected AppointmentsContext AppointmentsContext { get; set; }
-        protected IEquipmentAvailabilityService EquipmentAvailabilityService { get; set; }
-        protected DateTime ValidAppointmentDateTime { get; set; }
-        protected DateTime InvalidAppointmentDateTime { get; set; }
-
-        [SetUp]
-        public void SetUp()
+        public DateTime TestDateTime { get; }
+        
+        public BaseValidatorTests()
         {
-            AppointmentsContext = FakeServices.AppointmentsContext;
-            ValidAppointmentDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0);
-            InvalidAppointmentDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 17, 0, 0);
+            TestDateTime = DateTime.Parse("2021-01-10 12:00");
         }
-
-        [TearDown]
-        public void TearDown()
+        
+        public CreateAppointmentValidator GetCreateAppointmentValidator()
         {
-            AppointmentsContext.Database.EnsureDeleted();
-        }
-
-        protected void SeedDatabase(int numberOfPatients)
-        {
-            for (int i = 0; i < numberOfPatients; i++)
+            return new CreateAppointmentValidator(new StandardAppointmentParameters())
             {
-                AppointmentsContext.Patients.Add(new Patient { Id = i, EmailAddress = $"email_{i}@example.com" });
-            }
-            AppointmentsContext.SaveChanges();
+                Now = TestDateTime
+            };
         }
 
-        protected CreateAppointmentValidator GetValidator()
+        public ChangeAppointmentValidator GetChangeAppointmentValidator()
         {
-            return new CreateAppointmentValidator(new StandardAppointmentParameters());
-                                               
+            return new ChangeAppointmentValidator(new StandardAppointmentParameters())
+            {
+                Now = TestDateTime
+            };
+        }
+
+        public CancelAppointmentValidator GetCancelAppointmentValidator()
+        {
+            return new CancelAppointmentValidator(new StandardAppointmentParameters())
+            {
+                Now = TestDateTime
+            };
         }
     }
 }
