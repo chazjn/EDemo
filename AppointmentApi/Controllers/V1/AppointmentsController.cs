@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AppointmentApi.Db;
@@ -32,9 +33,22 @@ namespace AppointmentApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<AppointmentDto>>> Get()
+        public async Task<ActionResult<IList<AppointmentDto>>> Get([FromQuery]string date = "")
         {
-            var appointmentList = await _appointmentsRepository.GetAppointmentsByDateAsync(DateTime.Now.Date);
+            DateTime queryDateTime;
+            if (date != "")
+            {
+                if (DateTime.TryParseExact(date, "yyyyMMdd", null, DateTimeStyles.None, out queryDateTime) == false)
+                {
+                    return BadRequest("Invalid date format, should be 'yyyyMMdd'");
+                }
+            }
+            else 
+            {
+                queryDateTime = DateTime.Now.Date;
+            }
+            
+            var appointmentList = await _appointmentsRepository.GetAppointmentsByDateAsync(queryDateTime);
             var appointmentDtoList = appointmentList.Select(x => new AppointmentDto
             {
                 PatientId = x.PatientId,
