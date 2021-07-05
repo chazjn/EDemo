@@ -45,7 +45,7 @@ namespace AppointmentApi.Db
         {
             var errors = new List<ValidationError>();
 
-            var patient = GetPatientAsync(patientId);
+            var patient = await GetPatientAsync(patientId);
             if (patient == null)
                 errors.Add(new PatientDoesNotExist(patientId));
 
@@ -67,11 +67,11 @@ namespace AppointmentApi.Db
             return errors;
         }
 
-        public async Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime)
+        public async Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime, int equipmentId)
         {
             var errors = new List<ValidationError>();
 
-            var patient = GetPatientAsync(patientId);
+            var patient = await GetPatientAsync(patientId);
             if (patient == null)
                 errors.Add(new PatientDoesNotExist(patientId));
 
@@ -85,7 +85,13 @@ namespace AppointmentApi.Db
             
             if(newAppointment == null && previousAppointment != null)
             {
-                previousAppointment.DateTime = newDateTime;
+                previousAppointment.IsDeleted = true;
+                _appointmentsContext.Appointments.Add(new Appointment
+                {
+                    PatientId = patientId,
+                    EquipmentId = equipmentId,
+                    DateTime = newDateTime
+                });
                 await _appointmentsContext.SaveChangesAsync();
             }
 
@@ -96,7 +102,7 @@ namespace AppointmentApi.Db
         {
             var errors = new List<ValidationError>();
 
-            var patient = GetPatientAsync(patientId);
+            var patient = await GetPatientAsync(patientId);
             if (patient == null)
                 errors.Add(new PatientDoesNotExist(patientId));
             

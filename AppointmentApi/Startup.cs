@@ -96,6 +96,7 @@ namespace AppointmentApi
                 appointmentsContext.Patients.Add(new Patient { EmailAddress = "test1@example.com" });
                 appointmentsContext.Patients.Add(new Patient { EmailAddress = "test2@example.com" });
                 appointmentsContext.Patients.Add(new Patient { EmailAddress = "test3@example.com" });
+                appointmentsContext.Patients.Add(new Patient { EmailAddress = "test4@example.com" });
                 appointmentsContext.SaveChanges();
             } 
         }

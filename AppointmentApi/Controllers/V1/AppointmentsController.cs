@@ -74,7 +74,7 @@ namespace AppointmentApi.Controllers
             var createErrors = await _appointmentsRepository.TryCreateAppointmentAsync(dto.PatientId, dto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
             if(createErrors.Count > 0)
             {
-                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
+                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
                 return BadRequest(createErrors);
             }
 
@@ -103,14 +103,14 @@ namespace AppointmentApi.Controllers
             if (reserveRequest.Successful == false)
                 return BadRequest(new[] { new EquipmentUnavailable(dto.DateTime) });
 
-            var changeErrors = await _appointmentsRepository.TryChangeAppointmentAsync(dto.PatientId, dto.PreviousDateTime, dto.DateTime);
+            var changeErrors = await _appointmentsRepository.TryChangeAppointmentAsync(dto.PatientId, dto.PreviousDateTime, dto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
             if (changeErrors.Count > 0)
             {
-                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
+                _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime, reserveRequest.EquipmentAvailability.EquipmentId);
                 return BadRequest(changeErrors);
             }
                 
-            _equipmentAvailabilityService.UnreserveEquipment(dto.PreviousDateTime);
+            _equipmentAvailabilityService.UnreserveEquipment(dto.PreviousDateTime, reserveRequest.EquipmentAvailability.EquipmentId);
             
             return Ok();
         }
@@ -124,12 +124,13 @@ namespace AppointmentApi.Controllers
             if (validationErrors.Count > 0)
                 return BadRequest(validationErrors);
 
+            var appointment = await _appointmentsRepository.GetAppointmentAsync(dto.PatientId, dto.DateTime);
             var cancelErrors = await _appointmentsRepository.TryCancelAppointmentAsync(dto.PatientId, dto.DateTime);
-            if(cancelErrors.Count > 0)
+            if (cancelErrors.Count > 0)
                 return BadRequest(validationErrors);
 
-            _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime);
-
+             _equipmentAvailabilityService.UnreserveEquipment(dto.DateTime, appointment.EquipmentId);
+            
             return Ok();
         }
     }

@@ -17,7 +17,7 @@ namespace AppointmentApi.Db
 
         Task<IList<ValidationError>>  TryCreateAppointmentAsync(int patientId, DateTime dateTime, int equipmentId);
 
-        Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime);
+        Task<IList<ValidationError>> TryChangeAppointmentAsync(int patientId, DateTime previousDateTime, DateTime newDateTime, int newEquipmentId);
 
         Task<IList<ValidationError>> TryCancelAppointmentAsync(int patientId, DateTime dateTime);
     }

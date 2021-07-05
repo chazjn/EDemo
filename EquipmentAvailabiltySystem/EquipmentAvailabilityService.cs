@@ -28,7 +28,7 @@ namespace EquipmentAvailabiltySystem
 
             foreach (var equipmentItem in _equipmentItems)
             {
-                var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentItem.Id && a.Date == dateTime).SingleOrDefault();
+                var booking = _equipmentItemBookings.Where(a => a.EquipmentId == equipmentItem.Id && a.Date == dateTime).FirstOrDefault();
 
                 list.Add(new EquipmentAvailability
                 {
@@ -43,33 +43,32 @@ namespace EquipmentAvailabiltySystem
 
         public EquipmentReservationResult ReserveEquipment(DateTime dateTime)
         {
-            var availability = GetAvailability(dateTime);
-            var result = new EquipmentReservationResult();
+            var firstAvailableEquipmentItem = GetAvailability(dateTime).Where(a => a.IsAvailable == true).FirstOrDefault();
 
-            if (availability.Count > 0)
+            if (firstAvailableEquipmentItem == null)
+                return new EquipmentReservationResult();
+
+            var booking = new EquipmentItemBooking
             {
-                availability.First().IsAvailable = false;
-                return new EquipmentReservationResult
-                {
-                    Successful = true,
-                    EquipmentAvailability = availability.First()
-                };
-            }
+                EquipmentId = firstAvailableEquipmentItem.EquipmentId,
+                Date = dateTime
+            };
 
-            return result;
+            _equipmentItemBookings.Add(booking);
+
+            return new EquipmentReservationResult
+            {
+                Successful = true,
+                EquipmentAvailability = firstAvailableEquipmentItem
+            };
         }
 
-        public void UnreserveEquipment(DateTime dateTime)
+        public void UnreserveEquipment(DateTime dateTime, int equipmentId)
         {
-            var availability = GetAvailability(dateTime);
-
-            if (availability.Count > 0)
+            var booking = _equipmentItemBookings.Where(e => e.Date == dateTime && e.EquipmentId == equipmentId).FirstOrDefault();
+            if(booking != null)
             {
-                var item = availability.FirstOrDefault(a => a.IsAvailable == false);
-                if(item != null)
-                {
-                    item.IsAvailable = true;
-                }
+                _equipmentItemBookings.Remove(booking);
             }
         }
     }

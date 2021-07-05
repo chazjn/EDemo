@@ -7,6 +7,6 @@ namespace EquipmentAvailabiltySystem
     {
         IList<EquipmentAvailability> GetAvailability(DateTime dateTime);
         EquipmentReservationResult ReserveEquipment(DateTime dateTime);
-        void UnreserveEquipment(DateTime dateTime);
+        void UnreserveEquipment(DateTime dateTime, int equipmentId);
     }
 }
