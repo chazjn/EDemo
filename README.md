@@ -11,8 +11,6 @@ In addition the following services are also exposed for debugging purposes:
 - http://localhost:5002 - appointment api endpoints
 - localhost:5003 - sql server
 
-I note that when 
-
 
 ### Key Logic:
 
@@ -60,6 +58,10 @@ https://en.wikipedia.org/wiki/Two_Generals%27_Problem
 
 ### Improvements
 
+ - I note that when starting the project the appointment api fails to run first time because it is attempting to interact with the sql server before it is ready.
+  I looked up a few techniques to delay the api project starting until the sql server had finished loading, however I have not tried any yet.
+  Instead for the time-being I have added the following line in the docker-compose file: `restart: always`. Now the api project automatically attempts to re-load if it crashes on startup.
+  
 - sql sa password to be stored in secrets.json
 
 - Separate sql username/password to be set for the appointment api with the least privideges required
