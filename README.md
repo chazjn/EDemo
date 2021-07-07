@@ -35,19 +35,19 @@ Essentially the equipment/appointment logic is as follows:
 
 Create appointment:
 1. Attempt to reserve equipment
-  if no equipment available then return
-2. Attempt to create appointment
-  if cannot create appoitment then unreserve equipment
+2. If no equipment available then return
+3. Attempt to create appointment
+4. If cannot create appoitment then unreserve equipment
 
 Change appointment:
 1. Attempt to reserve equipment
-  if no equipment available then return
-2. Attempt to change appointment
-  if cannot change appointment then unreserve equipment
+2. If no equipment available then return
+3. Attempt to change appointment
+4. If cannot change appointment then unreserve equipment
 
 Cancel appointment:
 1. Attempt to cancel appointment
-  if cancellation successful then unreserve equipment
+2. If cancellation successful then unreserve equipment
 
 My main issue with this logic is that what happens if there is an exception in between reserving/unreserving equipment and creating/changing/canceling the appointment. 
 Obiously we could have some exception handling to tidy up but still the equipment/appointments are two seperate systems - 
